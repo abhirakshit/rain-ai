@@ -2,7 +2,7 @@ import "server-only";
 
 import { JWTPayload, jwtVerify } from "jose";
 
-import { createClient } from "@/lib/supabase/server";
+import { createSSRClient } from "@/lib/supabase/server";
 
 // Extend the JWTPayload type to include Supabase-specific metadata
 type SupabaseJwtPayload = JWTPayload & {
@@ -14,7 +14,7 @@ type SupabaseJwtPayload = JWTPayload & {
 
 export async function getUserRole() {
   // Create a Supabase client for server-side operations
-  const supabase = await createClient();
+  const supabase = await createSSRClient();
 
   // Retrieve the current session
   const {

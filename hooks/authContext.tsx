@@ -7,10 +7,12 @@ import {
   createContext,
   ReactNode,
 } from "react";
-import { redirect } from "next/navigation";
+import {redirect, usePathname, useRouter} from "next/navigation";
 import { Session, User } from "@supabase/supabase-js";
 
 import { createClient } from "@/lib/supabase/client";
+import {createSSRClient} from "@/lib/supabase/server";
+import {useOnboardingCheck} from "@/hooks/useOnboardingCheck";
 
 type AuthContextType = {
   session: Session | null;
@@ -30,11 +32,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+
   const supabaseClient = createClient();
+  const pathname = usePathname();
+  const router = useRouter();
 
-  // const router = useRouter();
 
-  // const { setUser: setZUser, setChartProfiles, reset } = useUserProfileStore();
+  // 🔹 use the same hook as your layout for consistency
+  const onboardingStatus = useOnboardingCheck(user?.id);
 
   useEffect(() => {
     const setData = async () => {
@@ -45,28 +50,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       if (error) throw error;
       setSession(session);
-      setUser(session?.user ?? null);
-
-      // if (session?.user) {
-      //   await loadUserProfile(session.user.id);
-      // }
+      const currentUser = session?.user ?? null;
+      setUser(currentUser ?? null);
 
       setLoading(false);
     };
 
     const { data: listener } = supabaseClient.auth.onAuthStateChange(
       async (event, session) => {
+        const currentUser = session?.user ?? null;
         setSession(session);
-        setUser(session?.user ?? null);
+        setUser(currentUser);
 
-        // if (session?.user && event === "SIGNED_IN") {
-        //   await loadUserProfile(session.user.id);
-        // }
-        //
-        // if (event === "SIGNED_OUT") {
-        //   reset();
-        //   redirect("/");
-        // }
+        // console.log("EVT", event);
+        if (event === "SIGNED_OUT") {
+          setUser(null);
+          router.replace("/auth/login");
+        }
 
         setLoading(false);
       },
@@ -77,44 +77,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       listener?.subscription.unsubscribe();
     };
-  }, []);
+  }, [pathname]);
 
-  // 🔹 Load profile + chart data
-  // const loadUserProfile = async (userId: string) => {
-  //   try {
-  //     const { data: profile, error: pErr } = await supabaseClient
-  //       .from("profiles")
-  //       .select("*")
-  //       .eq("id", userId)
-  //       .single();
-  //
-  //     if (pErr) throw pErr;
-  //
-  //     const { data: charts, error: cErr } = await supabaseClient
-  //       .from("chart_profiles")
-  //       .select("*")
-  //       .eq("user_id", userId);
-  //
-  //     if (cErr) throw cErr;
-  //
-  //     setZUser({
-  //       id: profile.id,
-  //       email: profile.email,
-  //       full_name: profile.full_name,
-  //       settings: profile.settings,
-  //     });
-  //
-  //     if (charts && charts.length > 0) {
-  //       setChartProfiles(charts);
-  //     } else {
-  //       // 👇 redirect to profile creation if no chart data
-  //       redirect("/profile/setup");
-  //     }
-  //   } catch (err) {
-  //     console.error("Profile load error:", err);
-  //     redirect("/profile/setup");
-  //   }
-  // };
+  // 🔸 Auto-route once user is known and onboarding status resolved
+  useEffect(() => {
+    if (!user?.id || loading || onboardingStatus === "pending") return;
+
+    const isAuthPage = pathname.startsWith("/auth");
+    const isRoot = pathname === "/";
+
+    if (isAuthPage || isRoot) {
+      if (onboardingStatus === "incomplete") router.replace("/onboarding");
+      else if (onboardingStatus === "complete") router.replace("/dashboard");
+    }
+  }, [user?.id, onboardingStatus, pathname, loading]);
 
   const revalidateSession = async () => {
     console.log("Revalidating session...");

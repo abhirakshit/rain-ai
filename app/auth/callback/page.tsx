@@ -1,4 +1,3 @@
-// app/auth/callback/page.tsx
 "use client";
 
 import { useEffect } from "react";
@@ -14,7 +13,7 @@ export default function AuthCallback() {
         const supabase = createClient();
 
         // Restore session from cookie
-        supabase.auth.getSession().then(({ data }) => {
+        supabase.auth.getSession().then(({data}) => {
             if (data.session) {
                 router.replace(next);
             } else {
@@ -23,5 +22,9 @@ export default function AuthCallback() {
         });
     }, [next]);
 
-    return <p>Redirecting...</p>;
+    return <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+        <div className="flex w-full max-w-sm flex-col gap-6">
+            <p>Signing In ...</p>
+        </div>
+    </div>
 }

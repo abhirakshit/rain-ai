@@ -36,7 +36,7 @@ const data = {
   },
   teams: [
     {
-      name: "Acme Inc",
+      name: "Conneczen",
       logo: GalleryVerticalEnd,
       plan: "Enterprise",
     },
@@ -59,61 +59,61 @@ const data = {
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Visions",
+          url: "/dashboard/visions",
         },
         {
-          title: "Starred",
-          url: "#",
+          title: "Sessions",
+          url: "/dashboard/sessions",
         },
         {
-          title: "Settings",
-          url: "#",
+          title: "Transcripts",
+          url: "/dashboard/transcripts",
         },
       ],
     },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
+    // {
+    //   title: "Models",
+    //   url: "#",
+    //   icon: Bot,
+    //   items: [
+    //     {
+    //       title: "Genesis",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Explorer",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Quantum",
+    //       url: "#",
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "Documentation",
+    //   url: "#",
+    //   icon: BookOpen,
+    //   items: [
+    //     {
+    //       title: "Introduction",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Get Started",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Tutorials",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Changelog",
+    //       url: "#",
+    //     },
+    //   ],
+    // },
     {
       title: "Settings",
       url: "#",
@@ -121,20 +121,20 @@ const data = {
       items: [
         {
           title: "General",
-          url: "#",
+          url: "/dashboard/settings",
         },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
+        // {
+        //   title: "Team",
+        //   url: "#",
+        // },
+        // {
+        //   title: "Billing",
+        //   url: "/settings/billing",
+        // },
+        // {
+        //   title: "Limits",
+        //   url: "#",
+        // },
       ],
     },
   ],
@@ -173,7 +173,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        {/*<NavProjects projects={data.projects} />*/}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={userData} />

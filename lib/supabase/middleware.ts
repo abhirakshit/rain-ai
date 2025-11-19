@@ -47,6 +47,8 @@ export async function updateSession(request: NextRequest) {
     // const role = user ? await getUserRole() : null;
     const path = request.nextUrl.pathname;
 
+    // console.log("RESP MIDDLE", path);
+
     const isPublicRoute =
         path === "/" ||
         path.startsWith("/blog") ||

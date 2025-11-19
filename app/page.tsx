@@ -1,7 +1,9 @@
 import Image from "next/image";
-import {Navbar} from "@/components/nav-home";
-import {NavigationMenuDemo} from "@/components/nav-menu";
 import {NavbarHome} from "@/components/navbar-home";
+import {TranscriptProvider} from "@/app/contexts/TranscriptContext";
+import {EventProvider} from "@/app/contexts/EventContext";
+import {Suspense} from "react";
+import VoiceChatClient from "@/components/chat/VoiceChatClient";
 
 export default function Home() {
     return (
@@ -13,6 +15,16 @@ export default function Home() {
                     {/*<Navbar/>*/}
                 </div>
             </nav>
+
+            {/*<Suspense fallback={<div>Loading...</div>}>*/}
+            {/*    /!*<VoiceChatClient />*!/*/}
+            {/*    <TranscriptProvider>*/}
+            {/*        <EventProvider>*/}
+            {/*            <VoiceChatClient />*/}
+            {/*        </EventProvider>*/}
+            {/*    </TranscriptProvider>*/}
+
+            {/*</Suspense>*/}
             <div
                 className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
                 <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
@@ -114,6 +126,5 @@ export default function Home() {
                 </footer>
             </div>
         </>
-
     );
 }

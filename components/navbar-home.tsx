@@ -21,6 +21,7 @@ import { cn } from '@/lib/utils';
 import {Button} from "@/components/ui/button";
 import {AuthButtonClient} from "@/components/auth-button-client";
 import {ModeToggle} from "@/components/mode-toggle";
+import {router} from "next/client";
 
 // Simple logo component for the navbar
 const Logo = (props: React.SVGAttributes<SVGElement>) => {
@@ -104,7 +105,7 @@ export interface NavbarHomeProps extends React.HTMLAttributes<HTMLElement> {
 
 // Default navigation links
 const defaultNavigationLinks: NavbarHomeNavItem[] = [
-  { href: '/', label: 'Home' },
+  // { href: '/', label: 'Home' },
   {
     label: 'Features',
     submenu: true,
@@ -218,7 +219,7 @@ export const NavbarHome = React.forwardRef<HTMLElement, NavbarHomeProps>(
       <header
         ref={combinedRef}
         className={cn(
-          'sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 md:px-6 [&_*]:no-underline',
+          'sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 [&_*]:no-underline',
           className
         )}
         {...props}
@@ -292,13 +293,16 @@ export const NavbarHome = React.forwardRef<HTMLElement, NavbarHomeProps>(
             {/* Main nav */}
             <div className="flex items-center gap-6">
               <button 
-                onClick={(e) => e.preventDefault()}
+                onClick={(e) => {
+                  e.preventDefault()
+                  // router
+                }}
                 className="flex items-center space-x-2 text-primary hover:text-primary/90 transition-colors cursor-pointer"
               >
                 <div className="text-2xl">
                   {logo}
                 </div>
-                <span className="hidden font-bold text-xl sm:inline-block">shadcn.io</span>
+                <span className="hidden font-bold text-xl sm:inline-block">rain.ai</span>
               </button>
               {/* Navigation menu */}
               {!isMobile && (
@@ -321,7 +325,7 @@ export const NavbarHome = React.forwardRef<HTMLElement, NavbarHomeProps>(
                                     className="flex h-full w-full select-none flex-col justify-center items-center text-center rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md cursor-pointer"
                                   >
                                     <div className="mb-3 text-xl font-medium">
-                                      shadcn.io
+                                      rain.ai
                                     </div>
                                     <p className="text-sm leading-tight text-muted-foreground">
                                       Beautifully designed components built with Radix UI and Tailwind CSS.

@@ -80,17 +80,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [pathname]);
 
   // 🔸 Auto-route once user is known and onboarding status resolved
-  useEffect(() => {
-    if (!user?.id || loading || onboardingStatus === "pending") return;
-
-    const isAuthPage = pathname.startsWith("/auth");
-    const isRoot = pathname === "/";
-
-    if (isAuthPage || isRoot) {
-      if (onboardingStatus === "incomplete") router.replace("/onboarding");
-      else if (onboardingStatus === "complete") router.replace("/dashboard");
-    }
-  }, [user?.id, onboardingStatus, pathname, loading]);
+  // useEffect(() => {
+  //   if (!user?.id || loading || onboardingStatus === "pending") return;
+  //
+  //   const isAuthPage = pathname.startsWith("/auth");
+  //   const isRoot = pathname === "/";
+  //
+  //   if (isAuthPage || isRoot) {
+  //     if (onboardingStatus === "incomplete") router.replace("/onboarding");
+  //     else if (onboardingStatus === "complete") router.replace("/dashboard");
+  //   }
+  // }, [user?.id, onboardingStatus, pathname, loading]);
 
   const revalidateSession = async () => {
     console.log("Revalidating session...");

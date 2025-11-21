@@ -1,130 +1,104 @@
+'use client'
 import Image from "next/image";
-import {NavbarHome} from "@/components/navbar-home";
-import {TranscriptProvider} from "@/app/contexts/TranscriptContext";
-import {EventProvider} from "@/app/contexts/EventContext";
-import {Suspense} from "react";
-import VoiceChatClient from "@/components/chat/VoiceChatClient";
+import { NavbarHome } from "@/components/navbar-home";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
+import { HomeIcon, Bot, BarChart3, Wrench } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Home() {
+    const router = useRouter();
+    const [domain, setDomain] = useState("");
+
+    const handleCheck = () => {
+        if (domain.trim()) {
+            router.push(`/check?domain=${encodeURIComponent(domain.trim())}`);
+        }
+    };
+
     return (
         <>
-            <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-                <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-                    {/*<NavigationMenuDemo/>*/}
-                    <NavbarHome/>
-                    {/*<Navbar/>*/}
+            <nav className="w-full flex justify-center border-b border-border h-16 bg-background">
+                <div className="w-full max-w-6xl flex justify-between items-center text-sm">
+                    <NavbarHome />
                 </div>
             </nav>
 
-            {/*<Suspense fallback={<div>Loading...</div>}>*/}
-            {/*    /!*<VoiceChatClient />*!/*/}
-            {/*    <TranscriptProvider>*/}
-            {/*        <EventProvider>*/}
-            {/*            <VoiceChatClient />*/}
-            {/*        </EventProvider>*/}
-            {/*    </TranscriptProvider>*/}
+            <main className="min-h-[calc(100vh-4rem)] w-full bg-background text-foreground px-6 py-10 flex flex-col items-center">
+                <section className="w-full bg-background px-6 py-6">
+                    <div className="flex flex-col lg:flex-row items-center justify-between gap-12 max-w-6xl mx-auto">
+                        {/* Hero Text */}
+                        <div className="flex-1 text-center lg:text-left">
+                            <h1 className="text-4xl sm:text-5xl font-bold mb-4">
+                                Will ChatGPT & Gemini Recommend Your Local Business?
+                            </h1>
+                            <p className="text-muted-foreground text-lg mb-8">
+                                Find out if your home service business shows up when customers ask AI tools:
+                                <em> “Who’s the best plumber near me?”</em>
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                                <Input
+                                    type="text"
+                                    placeholder="yourwebsite.com"
+                                    value={domain}
+                                    onChange={(e) => setDomain(e.target.value)}
+                                    className="w-full sm:w-72"
+                                />
+                                <Button size="lg" onClick={handleCheck}>
+                                    🔍 Check My Business
+                                </Button>
+                            </div>
+                        </div>
 
-            {/*</Suspense>*/}
-            <div
-                className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-                <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-
-                    <Image
-                        className="dark:invert"
-                        src="/next.svg"
-                        alt="Next.js logo"
-                        width={180}
-                        height={38}
-                        priority
-                    />
-                    <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-                        <li className="mb-2 tracking-[-.01em]">
-                            Get started by editing{" "}
-                            <code
-                                className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-                                app/page.tsx
-                            </code>
-                            .
-                        </li>
-                        <li className="tracking-[-.01em]">
-                            Save and see your changes instantly.
-                        </li>
-                    </ol>
-
-                    <div className="flex gap-4 items-center flex-col sm:flex-row">
-                        <a
-                            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-                            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <Image
-                                className="dark:invert"
-                                src="/vercel.svg"
-                                alt="Vercel logomark"
-                                width={20}
-                                height={20}
-                            />
-                            Deploy now
-                        </a>
-                        <a
-                            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-                            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Read our docs
-                        </a>
+                        {/* Hero Image */}
+                        <div className="flex-1">
+                            <div className="w-full max-w-md mx-auto border rounded-lg overflow-hidden shadow-md">
+                                <Image
+                                    src="/data-analysis.gif"
+                                    alt="AI Visibility Report Preview"
+                                    width={600}
+                                    height={400}
+                                    className="w-full h-auto"
+                                />
+                            </div>
+                        </div>
                     </div>
-                </main>
-                <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-                    <a
-                        className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                        href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <Image
-                            aria-hidden
-                            src="/file.svg"
-                            alt="File icon"
-                            width={16}
-                            height={16}
-                        />
-                        Learn
-                    </a>
-                    <a
-                        className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                        href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <Image
-                            aria-hidden
-                            src="/window.svg"
-                            alt="Window icon"
-                            width={16}
-                            height={16}
-                        />
-                        Examples
-                    </a>
-                    <a
-                        className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                        href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <Image
-                            aria-hidden
-                            src="/globe.svg"
-                            alt="Globe icon"
-                            width={16}
-                            height={16}
-                        />
-                        Go to nextjs.org →
-                    </a>
+                </section>
+
+                <section className="mt-4 max-w-6xl w-full">
+                    <h2 className="text-4xl font-bold text-center mb-6">How It Works</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-muted-foreground">
+                        <div className="flex flex-col items-center text-center gap-3">
+                            <HomeIcon className="w-8 h-8 text-primary" />
+                            <h3 className="text-base font-semibold text-foreground">Add Your Website</h3>
+                            <p className="text-sm">Enter your local business site and list your services.</p>
+                        </div>
+                        <div className="flex flex-col items-center text-center gap-3">
+                            <Bot className="w-8 h-8 text-primary" />
+                            <h3 className="text-base font-semibold text-foreground">We Ask the AI</h3>
+                            <p className="text-sm">We query ChatGPT, Gemini, and Claude using real customer questions.</p>
+                        </div>
+                        <div className="flex flex-col items-center text-center gap-3">
+                            <BarChart3 className="w-8 h-8 text-primary" />
+                            <h3 className="text-base font-semibold text-foreground">See Where You Stand</h3>
+                            <p className="text-sm">View your visibility score and what AI engines are saying about you.</p>
+                        </div>
+                        <div className="flex flex-col items-center text-center gap-3">
+                            <Wrench className="w-8 h-8 text-primary" />
+                            <h3 className="text-base font-semibold text-foreground">Fix & Track</h3>
+                            <p className="text-sm">Get action steps to improve and save your reports for future checks.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <footer className="mt-24 text-sm text-muted-foreground flex flex-col sm:flex-row gap-6 items-center justify-center border-t border-border pt-8 w-full max-w-5xl">
+                    <Link href="/privacy" className="hover:underline">Privacy</Link>
+                    <Link href="/terms" className="hover:underline">Terms</Link>
+                    <Link href="https://x.com/s_ai_nergy" target="_blank" className="hover:underline">Follow us on X</Link>
                 </footer>
-            </div>
+            </main>
         </>
     );
 }

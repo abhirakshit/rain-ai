@@ -59,7 +59,7 @@ const Navbar = ({
                         url: "https://www.shadcnblocks.com",
                         src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/shadcnblockscom-icon.svg",
                         alt: "logo",
-                        title: "Title",
+                        title: "Rain.ai",
                     },
                     menu = [
                         {title: "Home", url: "#"},

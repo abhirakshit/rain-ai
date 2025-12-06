@@ -17,7 +17,7 @@ export default function DashboardHome() {
             <Suspense fallback={<div>Loading...</div>}>
                 <TranscriptProvider>
                     <EventProvider>
-                        <VoiceChatClient />
+                        {/*<VoiceChatClient />*/}
                     </EventProvider>
                 </TranscriptProvider>
             </Suspense>

@@ -9,10 +9,7 @@ import {
 } from "react";
 import {redirect, usePathname, useRouter} from "next/navigation";
 import { Session, User } from "@supabase/supabase-js";
-
-import { createClient } from "@/lib/supabase/client";
-import {createSSRClient} from "@/lib/supabase/server";
-import {useOnboardingCheck} from "@/hooks/useOnboardingCheck";
+import {createSSRClient} from "@/lib/supabase/client";
 
 type AuthContextType = {
   session: Session | null;
@@ -33,13 +30,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const supabaseClient = createClient();
+  const supabaseClient = createSSRClient();
   const pathname = usePathname();
   const router = useRouter();
 
 
   // 🔹 use the same hook as your layout for consistency
-  const onboardingStatus = useOnboardingCheck(user?.id);
+  // const onboardingStatus = useOnboardingCheck(user?.id);
 
   useEffect(() => {
     const setData = async () => {

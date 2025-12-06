@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import {createSSRClient} from "@/lib/supabase/client";
 
 export default function AuthCallback() {
     const router = useRouter();
@@ -10,7 +10,7 @@ export default function AuthCallback() {
     const next = searchParams.get("next") || "/dashboard";
 
     useEffect(() => {
-        const supabase = createClient();
+        const supabase = createSSRClient()
 
         // Restore session from cookie
         supabase.auth.getSession().then(({data}) => {

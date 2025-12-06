@@ -1,5 +1,5 @@
 import {RealtimeAgent, tool} from '@openai/agents/realtime';
-import {createSSRClient} from "@/lib/supabase/server";
+import {createSSRServerClient} from "@/lib/supabase/server";
 import {z} from "zod";
 // import { getNextResponseFromSupervisor } from './supervisorAgent';
 
@@ -17,7 +17,7 @@ const saveTranscriptTool = tool({
         content: z.string(),
     }),
     execute: async ({ sessionId, userId, content }) => {
-        const supabase = createSSRClient();
+        const supabase = createSSRServerClient();
 
         const { data, error } = await supabase
             .from("session_transcripts")

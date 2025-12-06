@@ -1,7 +1,6 @@
 "use client";
 
 import {cn} from "@/lib/utils";
-import {createClient} from "@/lib/supabase/client";
 import {Button} from "@/components/ui/button";
 import {
   Card,
@@ -13,6 +12,7 @@ import {useRouter} from "next/navigation";
 import {useState} from "react";
 import {useAuth} from "@/hooks/authContext";
 import {Field, FieldDescription, FieldGroup, FieldLabel, FieldSeparator} from "@/components/ui/field";
+import {createSSRClient} from "@/lib/supabase/client";
 
 export function LoginForm({
                             className,
@@ -28,7 +28,7 @@ export function LoginForm({
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const supabase = createClient();
+    const supabase = createSSRClient();
     setIsLoading(true);
     setError(null);
 
@@ -80,7 +80,7 @@ export function LoginForm({
   // };
 
   const signInWithGoogle = async () => {
-    const supabase = createClient();
+    const supabase = createSSRClient();
     setIsLoading(true);
     setError(null);
 

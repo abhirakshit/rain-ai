@@ -5,9 +5,9 @@ import {
   AudioWaveform, BarChart,
   BookOpen,
   Bot,
-  Command, FileBarChart, FileText, FolderKanban,
+  Command, FileBarChart,
   Frame,
-  GalleryVerticalEnd, HelpCircle, LayoutDashboard, LineChart,
+  GalleryVerticalEnd,
   Map,
   PieChart, Plug,
   Settings2,
@@ -28,9 +28,9 @@ import {
 import {useAuth} from "@/hooks/authContext";
 import {useParams} from "next/navigation";
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function ProjectSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAuth();
-  const { projectId } = useParams()
+  const { id } = useParams()
   const data = {
     user: {
       name: "shadcn",
@@ -56,84 +56,41 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ],
     navMain: [
       {
-        title: "Dashboard",
-        url: "/dashboard",
-        icon: LayoutDashboard,
-        items: [],
-      },
-      {
-        title: "Projects",
-        url: "/projects",
-        icon: FolderKanban,
+        title: "Project",
+        url: `/projects/${id}`,
+        icon: SquareTerminal,
         items: [
-          {
-            title: "All Projects",
-            url: "/projects",
-          },
-          {
-            title: "New Project",
-            url: "/projects/new",
-          },
+          { title: "Dashboard", url: `/projects/${id}` },
+          { title: "Reports", url: `/projects/${id}/reports` },
+          { title: "LLM Visibility", url: `/projects/${id}/llm` },
+          { title: "On-page SEO", url: `/projects/${id}/seo` },
         ],
       },
       {
-        title: "Reports",
-        url: "/reports",
-        icon: FileText,
+        title: "Performance",
+        url: `/projects/${id}/performance`,
+        icon: PieChart,
         items: [
-          {
-            title: "Saved Reports",
-            url: "/reports",
-          },
-          {
-            title: "Shareable Links",
-            url: "/reports/shareable",
-          },
+          { title: "Campaign Impact", url: `/projects/${id}/performance/campaign` },
+          { title: "User Behavior", url: `/projects/${id}/performance/users` },
         ],
       },
       {
-        title: "Insights",
-        url: "/insights",
-        icon: LineChart,
+        title: "Narratives",
+        url: `/projects/${id}/narratives`,
+        icon: BookOpen,
         items: [
-          {
-            title: "LLM Visibility Trends",
-            url: "/insights/llm",
-          },
-          {
-            title: "SEO Opportunities",
-            url: "/insights/seo",
-          },
+          { title: "Auto Summary", url: `/projects/${id}/narratives/summary` },
+          { title: "Recommendations", url: `/projects/${id}/narratives/recommendations` },
         ],
       },
       {
         title: "Settings",
-        url: "/settings",
+        url: `/projects/${id}/settings`,
         icon: Settings2,
         items: [
-          {
-            title: "Account",
-            url: "/settings/account",
-          },
-          {
-            title: "Notifications",
-            url: "/settings/notifications",
-          },
-        ],
-      },
-      {
-        title: "Help",
-        url: "/help",
-        icon: HelpCircle,
-        items: [
-          {
-            title: "FAQs",
-            url: "/help/faq",
-          },
-          {
-            title: "Contact Support",
-            url: "/help/contact",
-          },
+          { title: "General", url: `/projects/${id}/settings` },
+          { title: "Integrations", url: `/projects/${id}/settings/integrations` },
         ],
       },
     ],

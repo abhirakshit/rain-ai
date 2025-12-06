@@ -2,7 +2,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import {useAuth} from "@/hooks/authContext";

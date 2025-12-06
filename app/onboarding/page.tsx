@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,10 +20,11 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 import { COACH_TYPES } from "@/lib/constants/coachTypes";
+import {createJSClient} from "@/lib/supabase/client";
 
 export default function OnboardingPage() {
     const router = useRouter();
-    const supabase = createClient();
+    const supabase = createJSClient();
     const { user } = useAuth();
 
 
@@ -96,13 +96,13 @@ export default function OnboardingPage() {
 
             const utcTime = localTime.utc().format("HH:mm");
 
-            await supabase.from("user_schedules").upsert({
-                user_id: user.id,
-                schedule_type: s.schedule_type,
-                call_time_local: s.call_time_local,
-                call_time_utc: utcTime,
-                timezone: form.timezone,
-            });
+            // await supabase.from("user_schedules").upsert({
+            //     user_id: user.id,
+            //     schedule_type: s.schedule_type,
+            //     call_time_local: s.call_time_local,
+            //     call_time_utc: utcTime,
+            //     timezone: form.timezone,
+            // });
         }
 
         setLoading(false);

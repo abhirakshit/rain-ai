@@ -1,54 +1,84 @@
-'use client';
+'use client'
 
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
-import {createJSClient} from "@/lib/supabase/client";
+import { useEffect, useState } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Loader2 } from 'lucide-react'
+import { createJSClient } from '@/lib/supabase/client'
+import {useAuth} from "@/hooks/authContext";
+
+type IntegrationProvider = 'google_analytics' | 'google_ads'
 
 type Integration = {
-    provider: string;
-    status: 'connected' | 'not_connected';
-    external_id: string | null;
-    expires_at: string | null;
-};
+    provider: IntegrationProvider
+    status: 'connected' | 'not_connected'
+    external_id: string | null
+    expires_at: string | null
+}
+
+const PROVIDER_LABELS: Record<IntegrationProvider, string> = {
+    google_analytics: 'Google Analytics 4',
+    google_ads: 'Google Ads',
+}
 
 export default function ProjectIntegrationsPage() {
-    const params = useParams();
-    const projectId = params?.id as string;
+    const params = useParams()
+    const { user } = useAuth();
+    const projectId = params?.id as string
 
-    const [loading, setLoading] = useState(true);
-    const [integrations, setIntegrations] = useState<Integration[]>([]);
+    const [loading, setLoading] = useState(true)
+    const [integrations, setIntegrations] = useState<Integration[]>([])
 
     useEffect(() => {
         const fetchIntegrations = async () => {
-            const supabase = createJSClient();
+            const supabase = createJSClient()
             const { data, error } = await supabase
-                .from('integrations')
-                .select('provider, status, external_id, expires_at')
-                .eq('project_id', projectId);
+                .from('project_integrations')
+                .select('provider, external_id, expires_at')
+                .eq('project_id', projectId)
 
             if (!error && data) {
-                setIntegrations(data);
+                const enriched: Integration[] = ['google_analytics', 'google_ads'].map((provider) => {
+                    const match = data.find((d) => d.provider === provider)
+                    return {
+                        provider,
+                        status: match ? 'connected' : 'not_connected',
+                        external_id: match?.external_id || null,
+                        expires_at: match?.expires_at || null,
+                    }
+                })
+                setIntegrations(enriched)
             } else {
-                console.error('Error loading integrations', error);
+                console.error('Error loading integrations', error)
             }
 
-            setLoading(false);
-        };
+            setLoading(false)
+        }
 
-        if (projectId) fetchIntegrations();
-    }, [projectId]);
+        if (projectId) fetchIntegrations()
+    }, [projectId])
+
+    const handleConnect = async (provider: IntegrationProvider) => {
+        if (!user || !user.id) {
+            alert("Please sign in to connect integrations.");
+            return;
+        }
+
+        const state = encodeURIComponent(JSON.stringify({ projectId }));
+        const res = await fetch(`/api/oauth/${provider}/start?state=${state}`);
+        const { url } = await res.json();
+        window.location.href = url;
+    };
 
     const renderStatusBadge = (status: Integration['status']) => {
         return (
             <Badge variant={status === 'connected' ? 'default' : 'secondary'}>
                 {status === 'connected' ? 'Connected' : 'Not Connected'}
             </Badge>
-        );
-    };
+        )
+    }
 
     return (
         <main className="max-w-4xl mx-auto px-6 py-10">
@@ -60,38 +90,42 @@ export default function ProjectIntegrationsPage() {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {['google_analytics', 'google_ads'].map((provider) => {
-                        const integration = integrations.find((i) => i.provider === provider);
-                        const isConnected = integration?.status === 'connected';
+                    {integrations.map((integration) => {
+                        const isConnected = integration.status === 'connected'
 
                         return (
-                            <Card key={provider}>
+                            <Card key={integration.provider}>
                                 <CardHeader>
                                     <CardTitle className="flex items-center justify-between">
-                                        {provider === 'google_analytics' ? 'Google Analytics 4' : 'Google Ads'}
-                                        {renderStatusBadge(integration?.status || 'not_connected')}
+                                        {PROVIDER_LABELS[integration.provider]}
+                                        {renderStatusBadge(integration.status)}
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="text-sm text-muted-foreground space-y-2">
                                     <div>
                                         <strong>External ID:</strong>{' '}
-                                        {integration?.external_id || '—'}
+                                        {integration.external_id || '—'}
                                     </div>
                                     <div>
                                         <strong>Expires:</strong>{' '}
-                                        {integration?.expires_at
+                                        {integration.expires_at
                                             ? new Date(integration.expires_at).toLocaleString()
                                             : '—'}
                                     </div>
-                                    <Button size="sm" className="mt-4" variant={isConnected ? 'secondary' : 'default'}>
+                                    <Button
+                                        size="sm"
+                                        className="mt-4"
+                                        variant={isConnected ? 'secondary' : 'default'}
+                                        onClick={() => handleConnect(integration.provider)}
+                                    >
                                         {isConnected ? 'Reconnect' : 'Connect'}
                                     </Button>
                                 </CardContent>
                             </Card>
-                        );
+                        )
                     })}
                 </div>
             )}
         </main>
-    );
+    )
 }
